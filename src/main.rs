@@ -14,7 +14,7 @@ fn main() {
             match thermometer.temperature() {
                 Ok(temperature) => {
                     println!("{:.3} degrees celsius in {}", temperature.celsius(), thermometer.name());
-                },
+                }
                 Err(error) => {
                     println!("Failed to read temperature for {}: {}", thermometer.name(), error);
                 }

@@ -10,7 +10,9 @@ impl Config {
         let living_room = DS18B20::new("Living room", "28-000009e8f6e7");
         let bedroom = DS18B20::new("Bedroom", "28-000009e9b786");
 
-        Config { thermometers: vec![Box::new(living_room), Box::new(bedroom)] }
+        Config {
+            thermometers: vec![Box::new(living_room), Box::new(bedroom)],
+        }
     }
 
     pub fn thermometers(&self) -> &[Box<Thermometer>] {
