@@ -29,3 +29,7 @@ List of [supported devices](https://docs.resin.io/reference/hardware/devices/). 
 
 * `resin-sync.yml` (`cargo build --target=...`)
 * `scripts/local-push.sh` (`RESIN_MACHINE_NAME`)
+
+## Related Articles
+
+* [Rust Thermometer - Part 1](https://www.robertvojta.com/rust-thermometer-part-1/)
