@@ -48,6 +48,7 @@ impl FromStr for Temperature {
             })
             .and_then(|v| match v {
                 -1 => Err(Error::from("Invalid temperature value (-1)")),
+                85_000 => Err(Error::from("Sensor error (t=85000)")),
                 _ => Ok(v),
             })?;
 
@@ -83,6 +84,15 @@ mod tests {
     fn test_parser_invalid_temperature_crc() {
         let temp = "b2 01 4b 46 7f ff 0e 10 8c : crc=8c NO\n\
                     b2 01 4b 46 7f ff 0e 10 8c t=27125"
+            .parse::<Temperature>();
+
+        assert!(temp.is_err());
+    }
+
+    #[test]
+    fn test_parser_sensor_error() {
+        let temp = "b2 01 4b 46 7f ff 0e 10 8c : crc=8c NO\n\
+                    b2 01 4b 46 7f ff 0e 10 8c t=85000"
             .parse::<Temperature>();
 
         assert!(temp.is_err());
