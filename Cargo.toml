@@ -1,0 +1,6 @@
+[package]
+name = "rust-thermometer"
+version = "0.0.1"
+authors = ["Robert Vojta <zrzka@users.noreply.github.com>"]
+
+[dependencies]

@@ -1,0 +1,6 @@
+**/.idea/
+**/target/
+**/*.rs.bk
+**/.DS_Store
+Dockerfile
+.resin-sync.yml
