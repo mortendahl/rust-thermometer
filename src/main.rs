@@ -20,6 +20,6 @@ fn main() {
                 }
             }
         }
-        sleep(Duration::from_millis(1_000));
+        sleep(Duration::from_millis(60_000));
     }
 }
