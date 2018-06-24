@@ -9,3 +9,7 @@ clap = "2"
 piston_window = "0.80"
 find_folder = "0.3.0"
 lazy_static = "1"
+
+[features]
+default = []
+simulate-temperature = []
