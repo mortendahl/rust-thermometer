@@ -15,7 +15,32 @@ Thermometer prototype written in the Rust language.
 
 ## Configuration
 
-N/A for now. You have to add your thermometers to `src/config.rs`.
+You can either use command line argument (like `inside-thermometer`) or environment variable
+(like `INSIDE_THERMOMETER`).
+
+```
+thermometer 0.0.2
+Raspberry Pi Thermometer
+
+USAGE:
+    thermometer --inside-thermometer <INSIDE_THERMOMETER>
+        --outside-thermometer <OUTSIDE_THERMOMETER>
+        --temperature-units <TEMPERATURE_UNITS>
+
+FLAGS:
+    -h, --help       Prints help information
+    -V, --version    Prints version information
+
+OPTIONS:
+        --inside-thermometer <INSIDE_THERMOMETER>
+            Inside W1 thermometer device ID [env: INSIDE_THERMOMETER=]  [default: 28-000009e8f6e7]
+
+        --outside-thermometer <OUTSIDE_THERMOMETER>
+            Outside W1 thermometer device ID [env: OUTSIDE_THERMOMETER=]  [default: 28-000009d4dffc]
+
+        --temperature-units <TEMPERATURE_UNITS>
+            Temperature units [env: TEMPERATURE_UNITS=]  [default: celsius]  [possible values: celsius, fahrenheit]
+```
 
 ## Local deployment
 
