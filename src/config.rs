@@ -1,4 +1,6 @@
 use clap::{App, Arg};
+use std::fmt::Display;
+use std::str::FromStr;
 use w1::thermometer::Units;
 
 /// Package version (set at compile time).
@@ -7,11 +9,46 @@ pub const PKG_VERSION: &'static str = env!("CARGO_PKG_VERSION");
 /// Package name (set at compile time).
 pub const PKG_NAME: &'static str = env!("CARGO_PKG_NAME");
 
+/// Return `()` in case provided argument is valid otherwise error message is returned.
+///
+/// # Arguments
+///
+/// * `value` - number in a `String`
+/// * `min` - if provided, `value` must be greater or equal to `min`
+/// * `max` - if provided, `value` must be lower or equal to `max`
+fn validate<T>(value: String, min: Option<T>, max: Option<T>) -> Result<(), String>
+where
+    T: FromStr + PartialOrd + Display,
+{
+    match value.parse::<T>() {
+        Ok(value) => {
+            if let Some(min) = min {
+                if value < min {
+                    return Err(format!("Value must not be lower than {}", min));
+                }
+            }
+            if let Some(max) = max {
+                if value > max {
+                    return Err(format!("Value must not be greater than {}", max));
+                }
+            }
+
+            Ok(())
+        }
+        Err(_) => Err("Invalid port number".to_string()),
+    }
+}
+
+fn validate_max_fps(value: String) -> Result<(), String> {
+    validate::<u64>(value, Some(2), Some(60))
+}
+
 /// Application configuration.
 pub struct Config {
     inside_thermometer_device: String,
     outside_thermometer_device: String,
     temperature_units: Units,
+    max_fps: u64,
 }
 
 impl Config {
@@ -49,17 +86,29 @@ impl Config {
                     .possible_value(Units::Fahrenheit.as_ref())
                     .default_value(Units::Celsius.as_ref()),
             )
+            .arg(
+                Arg::with_name("MAX_FPS")
+                    .long("max-fps")
+                    .env("MAX_FPS")
+                    .help("Max frames per second")
+                    .takes_value(true)
+                    .required(true)
+                    .default_value("2")
+                    .validator(validate_max_fps),
+            )
             .get_matches();
 
         // It's ok to unwrap all values. If it crashes, it's programmer error in argument definition.
         let inside_thermometer_device = matches.value_of("INSIDE_THERMOMETER").unwrap().to_string();
         let outside_thermometer_device = matches.value_of("OUTSIDE_THERMOMETER").unwrap().to_string();
         let temperature_units = matches.value_of("TEMPERATURE_UNITS").unwrap().parse::<Units>().unwrap();
+        let max_fps = matches.value_of("MAX_FPS").unwrap().parse::<u64>().unwrap();
 
         Config {
             inside_thermometer_device,
             outside_thermometer_device,
             temperature_units,
+            max_fps,
         }
     }
 
@@ -76,6 +125,11 @@ impl Config {
     /// Temperature units.
     pub fn temperature_units(&self) -> &Units {
         &self.temperature_units
+    }
+
+    /// Max frames per second.
+    pub fn max_fps(&self) -> u64 {
+        self.max_fps
     }
 }
 

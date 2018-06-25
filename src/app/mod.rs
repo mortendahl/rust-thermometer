@@ -86,7 +86,7 @@ pub fn run(shared_state: SharedState) {
         .build()
         .unwrap();
 
-    window.set_max_fps(2);
+    window.set_max_fps(config::CONFIG.max_fps());
 
     let view = View::new(&mut window.factory);
     let mut app = App::new(shared_state, view);
