@@ -25,7 +25,7 @@ export RESIN_MACHINE_TARGET=armv7-unknown-linux-gnueabihf
 Push to specific local device:
 
 ```bash
-scripts/local-push.sh cae15d3.local
+$ scripts/local-push.sh cae15d3.local
 ```
 
 Let Resin CLI find local device for us:
