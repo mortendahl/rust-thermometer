@@ -35,8 +35,11 @@ impl View {
     /// # Arguments
     ///
     /// * `model` - new view model
-    pub fn set_model(&mut self, model: Model) {
-        self.model = Some(model);
+    pub fn set_model<M>(&mut self, model: M)
+    where
+        M: Into<Model>,
+    {
+        self.model = Some(model.into());
     }
 
     /// Render view.
