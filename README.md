@@ -6,7 +6,8 @@ Thermometer prototype written in the Rust language.
 * Thermometer DS18B20
 * Deployment via [resin.io](https://resin.io/)
 
-[License](LICENSE.md).
+Application contains third party [assets](assets). See [license](LICENSE.md) for more
+details about ownership and trademarks.
 
 ## Prerequisites
 

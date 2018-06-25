@@ -1,15 +1,17 @@
 # Local push
 
 `resin local push` does not support [Dockerfile.template](../Dockerfile.template). Proper `Dockerfile`
-must be created before attempt for local push is made.
+must be created before any local push attempt is made.
 
 It's all handled via [local-push.sh](../scripts/local-push.sh) script. This script is driven by
-environment variables set in the [local-push.env](../local-push.env) file. Two variables are supported now:
+environment variables set in the [local-push.env](../local-push.env) file.
+
+Two variables are supported now:
 
 * `RESIN_MACHINE_NAME`
 * `RESIN_MACHINE_TARGET`
 
-By default, this repository contains values for Raspberry Pi 3 B+. 
+This repository contains values for Raspberry Pi 3 B+. 
 
 ## Sample values for Raspberry Pi 3 B+
 
@@ -26,7 +28,7 @@ Push to specific local device:
 scripts/local-push.sh cae15d3.local
 ```
 
-Let Resin CLI find local devices for us:
+Let Resin CLI find local device for us:
 
 ```bash
 $ scripts/local-push.sh
