@@ -24,3 +24,4 @@ details about ownership and trademarks.
 ## Blog posts
 
 * [Rust Thermometer - Part 1](https://www.robertvojta.com/rust-thermometer-part-1/)
+* [Rust Thermometer - Part 2](https://www.robertvojta.com/rust-thermometer-part-2/)
