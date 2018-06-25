@@ -6,7 +6,7 @@ use self::model::Model;
 use self::view::View;
 use chrono::{Local, SecondsFormat};
 use config;
-use piston_window::*;
+use piston_window::{Event, EventLoop, OpenGL, PistonWindow, RenderEvent, UpdateArgs, UpdateEvent, WindowSettings};
 use state::{SharedState, State};
 
 /// Convert `State` into view `Model` with current date & time.
