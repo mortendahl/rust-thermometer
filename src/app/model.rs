@@ -3,6 +3,7 @@ pub struct Model {
     inside_temperature: String,
     outside_temperature: String,
     time: String,
+    date: String,
 }
 
 impl Model {
@@ -10,17 +11,22 @@ impl Model {
     ///
     /// # Arguments
     ///
-    /// * `inside_temperature` - inside temperature
-    /// * `outside_temperature` - outside temperature
-    /// * `time` - date & time
-    pub fn new<S>(inside_temperature: S, outside_temperature: S, time: S) -> Model
+    /// * `inside_temperature` - formatted inside temperature
+    /// * `outside_temperature` - formatted outside temperature
+    /// * `time` - formatted time
+    /// * `date` - formatted date
+    pub fn new<S1, S2, S3, S4>(inside_temperature: S1, outside_temperature: S2, time: S3, date: S4) -> Model
     where
-        S: Into<String>,
+        S1: Into<String>,
+        S2: Into<String>,
+        S3: Into<String>,
+        S4: Into<String>
     {
         Model {
             inside_temperature: inside_temperature.into(),
             outside_temperature: outside_temperature.into(),
             time: time.into(),
+            date: date.into(),
         }
     }
 
@@ -34,8 +40,13 @@ impl Model {
         &self.outside_temperature
     }
 
-    /// Current date & time.
+    /// Current time.
     pub fn time(&self) -> &str {
         &self.time
+    }
+
+    /// Current date.
+    pub fn date(&self) -> &str {
+        &self.date
     }
 }
