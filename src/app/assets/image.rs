@@ -18,6 +18,16 @@ impl Image {
         Image { texture }
     }
 
+    /// Image width.
+    pub fn width(&self) -> u32 {
+        self.texture.get_width()
+    }
+
+    /// Image height.
+    pub fn height(&self) -> u32 {
+        self.texture.get_height()
+    }
+
     /// Create new `Image` from asset file name.
     ///
     /// # Arguments
