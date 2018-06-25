@@ -4,10 +4,38 @@ mod view;
 
 use self::model::Model;
 use self::view::View;
-use chrono::Local;
+use chrono::{Local, SecondsFormat};
 use config;
 use piston_window::*;
-use state::SharedState;
+use state::{SharedState, State};
+
+/// Convert `State` into view `Model` with current date & time.
+impl From<State> for Model {
+    fn from(state: State) -> Model {
+        let inside_temperature = format!(
+            "Inside temperature {}",
+            state
+                .inside_temperature
+                .map(|t| t.to_string(config::CONFIG.temperature_units()))
+                .unwrap_or_else(|| "N/A".to_string())
+        );
+
+        let outside_temperature = format!(
+            "Outside temperature {}",
+            state
+                .outside_temperature
+                .map(|t| t.to_string(config::CONFIG.temperature_units()))
+                .unwrap_or_else(|| "N/A".to_string())
+        );
+
+        let formatted = Local::now().to_rfc3339_opts(SecondsFormat::Secs, false);
+
+        let date: &str = &formatted[..10];
+        let time: &str = &formatted[11..];
+
+        Model::new(inside_temperature, outside_temperature, date, time)
+    }
+}
 
 /// Main application (UI).
 struct App {
@@ -45,29 +73,7 @@ impl App {
     ///
     /// * `_args` - update arguments (not used)
     fn update(&mut self, _args: &UpdateArgs) {
-        // Get state snapshot
-        let state = self.shared_state.state();
-
-        let inside_temperature = format!(
-            "Inside temperature {}",
-            state
-                .inside_temperature
-                .map(|t| t.to_string(config::CONFIG.temperature_units()))
-                .unwrap_or_else(|| "N/A".to_string())
-        );
-
-        let outside_temperature = format!(
-            "Outside temperature {}",
-            state
-                .outside_temperature
-                .map(|t| t.to_string(config::CONFIG.temperature_units()))
-                .unwrap_or_else(|| "N/A".to_string())
-        );
-
-        let time = Local::now().to_rfc2822();
-
-        self.view
-            .set_model(Model::new(inside_temperature, outside_temperature, time));
+        self.view.set_model(self.shared_state.state());
     }
 }
 
