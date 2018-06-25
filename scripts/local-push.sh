@@ -2,7 +2,7 @@
 
 set -e
 
-source local.env
+source local-push.env
 
 DOCKERFILE_TEMPLATE="Dockerfile.template"
 DOCKERFILE="Dockerfile"
