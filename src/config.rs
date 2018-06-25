@@ -43,12 +43,17 @@ fn validate_max_fps(value: String) -> Result<(), String> {
     validate::<u64>(value, Some(2), Some(60))
 }
 
+fn validate_temperature_interval(value: String) -> Result<(), String> {
+    validate::<u64>(value, Some(500), Some(60_000))
+}
+
 /// Application configuration.
 pub struct Config {
     inside_thermometer_device: String,
     outside_thermometer_device: String,
     temperature_units: Units,
     max_fps: u64,
+    temperature_interval: u64,
 }
 
 impl Config {
@@ -96,6 +101,16 @@ impl Config {
                     .default_value("2")
                     .validator(validate_max_fps),
             )
+            .arg(
+                Arg::with_name("TEMPERATURE_INTERVAL")
+                    .long("temperature-interval")
+                    .env("TEMPERATURE_INTERVAL")
+                    .help("Interval in which temperatures are read from sensors (ms)")
+                    .takes_value(true)
+                    .required(true)
+                    .default_value("500")
+                    .validator(validate_temperature_interval),
+            )
             .get_matches();
 
         // It's ok to unwrap all values. If it crashes, it's programmer error in argument definition.
@@ -103,12 +118,18 @@ impl Config {
         let outside_thermometer_device = matches.value_of("OUTSIDE_THERMOMETER").unwrap().to_string();
         let temperature_units = matches.value_of("TEMPERATURE_UNITS").unwrap().parse::<Units>().unwrap();
         let max_fps = matches.value_of("MAX_FPS").unwrap().parse::<u64>().unwrap();
+        let temperature_interval = matches
+            .value_of("TEMPERATURE_INTERVAL")
+            .unwrap()
+            .parse::<u64>()
+            .unwrap();
 
         Config {
             inside_thermometer_device,
             outside_thermometer_device,
             temperature_units,
             max_fps,
+            temperature_interval,
         }
     }
 
@@ -130,6 +151,11 @@ impl Config {
     /// Max frames per second.
     pub fn max_fps(&self) -> u64 {
         self.max_fps
+    }
+
+    /// Interval in which temperatures are read from sensors (ms)
+    pub fn temperature_interval(&self) -> u64 {
+        self.temperature_interval
     }
 }
 

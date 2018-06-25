@@ -23,14 +23,14 @@ fn main() {
         state.clone(),
         temperature::Location::Inside,
         Box::new(DS18B20::new(config::CONFIG.inside_thermometer_device())),
-        Duration::from_millis(500),
+        Duration::from_millis(config::CONFIG.temperature_interval()),
     );
 
     temperature::spawn_temperature_reader(
         state.clone(),
         temperature::Location::Outside,
         Box::new(DS18B20::new(config::CONFIG.outside_thermometer_device())),
-        Duration::from_millis(500),
+        Duration::from_millis(config::CONFIG.temperature_interval()),
     );
 
     app::run(state);
