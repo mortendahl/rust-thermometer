@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
+# Default to UTC if no TIMEZONE env variable is set
+echo "Setting time zone to ${TIMEZONE=UTC}"
+echo "${TIMEZONE}" > /etc/timezone
+dpkg-reconfigure tzdata
+
 # Disable DPMS / Screen blanking
 xset -dpms
 xset s off
