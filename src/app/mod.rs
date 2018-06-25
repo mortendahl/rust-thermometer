@@ -6,7 +6,9 @@ use self::model::Model;
 use self::view::View;
 use chrono::{Local, SecondsFormat};
 use config;
-use piston_window::{Event, EventLoop, OpenGL, PistonWindow, RenderEvent, UpdateArgs, UpdateEvent, WindowSettings};
+use piston_window::{
+    Event, EventLoop, OpenGL, PistonWindow, RenderEvent, UpdateArgs, UpdateEvent, Window, WindowSettings,
+};
 use state::{SharedState, State};
 
 /// Convert `State` into view `Model` with current date & time.
@@ -30,10 +32,10 @@ impl From<State> for Model {
 
         let formatted = Local::now().to_rfc3339_opts(SecondsFormat::Secs, false);
 
-        let date: &str = &formatted[..10];
-        let time: &str = &formatted[11..];
+        let date: &str = &formatted[..10]; // YYYY-MM-DD
+        let time: &str = &formatted[11..19]; // HH:MM:SS
 
-        Model::new(inside_temperature, outside_temperature, date, time)
+        Model::new(inside_temperature, outside_temperature, time, date)
     }
 }
 
@@ -61,9 +63,12 @@ impl App {
     /// * `window` - window
     /// * `e` - event
     fn render(&mut self, window: &mut PistonWindow, e: &Event) {
+        // Do not use draw_size() here, because it returns 1600x960 in case of retina displays,
+        // 800x480 on Rpi. size() always returns 800x480.
+        let size = window.size();
         window.draw_2d(e, |c, g| {
             // Just call draw on our view, it will render itself
-            self.view.draw(c, g);
+            self.view.draw(size, c, g);
         });
     }
 
