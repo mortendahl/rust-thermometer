@@ -20,7 +20,7 @@ impl Model {
         S1: Into<String>,
         S2: Into<String>,
         S3: Into<String>,
-        S4: Into<String>
+        S4: Into<String>,
     {
         Model {
             inside_temperature: inside_temperature.into(),
