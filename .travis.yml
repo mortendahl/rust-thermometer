@@ -1,10 +1,30 @@
 language: rust
-cache: cargo
+
 rust:
   - stable
-  - beta
-  - nightly
-matrix:
-  allow_failures:
-    - rust: nightly
-  fast_finish: true
+
+install:
+  # Print installed versions
+  - rustc --version --verbose
+  - cargo --version --verbose
+
+  # Install nightly
+  - rustup toolchain install nightly
+
+  # Install rustfmt-preview
+  - rustup component add --toolchain nightly rustfmt-preview
+  - which rustfmt || cargo install --force rustfmt-nightly
+
+  # Install clippy (allow to fail)
+  - cargo +nightly install --force clippy || /bin/true
+
+script:
+  # Check formatting
+  - cargo +nightly fmt --all -- --check
+
+  # Build & test
+  - cargo build --verbose
+  - cargo test --verbose
+
+  # Lints (allow to fail)
+  - cargo +nightly clippy || /bin/true
