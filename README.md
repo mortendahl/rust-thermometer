@@ -9,6 +9,10 @@ Thermometer prototype written in the Rust language.
 Application contains third party [assets](assets). See [license](LICENSE.md) for more
 details about ownership and trademarks.
 
+## Design
+
+Designer wanted! [Details](https://gist.github.com/zrzka/022f560d651ad259ba6945c67d7462b7).
+
 ## Prerequisites
 
 * [resinOS](https://resinos.io) is installed on your device.
