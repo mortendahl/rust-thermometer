@@ -30,4 +30,5 @@ script:
   - cargo test --verbose
 
   # Lints (allow to fail)
+  - cargo +nightly clean -p thermometer
   - cargo +nightly clippy || /bin/true
