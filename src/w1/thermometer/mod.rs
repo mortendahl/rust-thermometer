@@ -19,8 +19,8 @@ pub enum Units {
 impl AsRef<str> for Units {
     fn as_ref(&self) -> &str {
         match self {
-            &Units::Celsius => "celsius",
-            &Units::Fahrenheit => "fahrenheit",
+            Units::Celsius => "celsius",
+            Units::Fahrenheit => "fahrenheit",
         }
     }
 }
@@ -71,8 +71,8 @@ impl Temperature {
     /// * `units` - temperature units
     pub fn to_string(&self, units: &Units) -> String {
         match units {
-            &Units::Celsius => format!("{:.1} °C", self.celsius()),
-            &Units::Fahrenheit => format!("{:.1} °F", self.fahrenheit()),
+            Units::Celsius => format!("{:.1} °C", self.celsius()),
+            Units::Fahrenheit => format!("{:.1} °F", self.fahrenheit()),
         }
     }
 }

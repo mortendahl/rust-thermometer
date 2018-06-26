@@ -77,6 +77,7 @@ impl App {
     /// # Arguments
     ///
     /// * `_args` - update arguments (not used)
+    #[cfg_attr(feature = "cargo-clippy", allow(trivially_copy_pass_by_ref))]
     fn update(&mut self, _args: &UpdateArgs) {
         self.view.set_model(self.shared_state.state());
     }
@@ -103,7 +104,7 @@ pub fn run(shared_state: SharedState) {
     let mut app = App::new(shared_state, view);
 
     while let Some(e) = window.next() {
-        if let Some(_) = e.render_args() {
+        if e.render_args().is_some() {
             app.render(&mut window, &e);
         }
 

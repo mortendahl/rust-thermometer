@@ -55,7 +55,7 @@ impl Font {
                 text,
                 &mut self.glyphs,
                 &DrawState::default(),
-                c.transform.trans(p.x as f64, p.y as f64),
+                c.transform.trans(f64::from(p.x), f64::from(p.y)),
                 g,
             )
             .unwrap();

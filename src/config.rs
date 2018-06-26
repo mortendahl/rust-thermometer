@@ -4,10 +4,10 @@ use std::str::FromStr;
 use w1::thermometer::Units;
 
 /// Package version (set at compile time).
-pub const PKG_VERSION: &'static str = env!("CARGO_PKG_VERSION");
+pub const PKG_VERSION: &str = env!("CARGO_PKG_VERSION");
 
 /// Package name (set at compile time).
-pub const PKG_NAME: &'static str = env!("CARGO_PKG_NAME");
+pub const PKG_NAME: &str = env!("CARGO_PKG_NAME");
 
 /// Return `()` in case provided argument is valid otherwise error message is returned.
 ///
@@ -16,6 +16,7 @@ pub const PKG_NAME: &'static str = env!("CARGO_PKG_NAME");
 /// * `value` - number in a `String`
 /// * `min` - if provided, `value` must be greater or equal to `min`
 /// * `max` - if provided, `value` must be lower or equal to `max`
+#[cfg_attr(feature = "cargo-clippy", allow(trivially_copy_pass_by_ref, needless_pass_by_value))]
 fn validate<T>(value: String, min: Option<T>, max: Option<T>) -> Result<(), String>
 where
     T: FromStr + PartialOrd + Display,

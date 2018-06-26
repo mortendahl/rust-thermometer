@@ -62,9 +62,5 @@ pub fn texture(name: &str, factory: &mut GfxFactory, settings: Option<&TextureSe
 ///
 /// Function panics if asset is not found or can't be loaded.
 pub fn glyphs(name: &str, factory: GfxFactory, settings: Option<TextureSettings>) -> Glyphs {
-    Glyphs::new(
-        asset_path(name),
-        factory,
-        settings.unwrap_or_else(|| TextureSettings::new()),
-    ).unwrap()
+    Glyphs::new(asset_path(name), factory, settings.unwrap_or_else(TextureSettings::new)).unwrap()
 }

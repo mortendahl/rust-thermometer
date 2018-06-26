@@ -42,26 +42,26 @@ impl View {
         self.model = Some(model.into());
     }
 
-    fn rust_logo_position(&self, size: &Size) -> Position {
+    fn rust_logo_position(&self, size: Size) -> Position {
         [
             (size.width - self.rust_logo.width() - 15) as i32,
             (size.height - self.rust_logo.height() - 15) as i32,
         ].into()
     }
 
-    fn time_position(&self, _size: &Size) -> Position {
+    fn time_position(&self, _size: Size) -> Position {
         [15, 22].into()
     }
 
-    fn date_position(&self, size: &Size) -> Position {
+    fn date_position(&self, size: Size) -> Position {
         [15, size.height as i32 - 20].into()
     }
 
-    fn inside_temperature_position(&self, _size: &Size) -> Position {
+    fn inside_temperature_position(&self, _size: Size) -> Position {
         [250, 200].into()
     }
 
-    fn outside_temperature_position(&self, _size: &Size) -> Position {
+    fn outside_temperature_position(&self, _size: Size) -> Position {
         [250, 250].into()
     }
 
@@ -74,23 +74,23 @@ impl View {
     pub fn draw(&mut self, size: Size, c: Context, g: &mut G2d) {
         clear(color::BLACK, g);
 
-        let logo_position = self.rust_logo_position(&size);
+        let logo_position = self.rust_logo_position(size);
         self.rust_logo.draw_at(logo_position, &c, g);
 
         if let Some(ref model) = self.model {
-            let position = self.time_position(&size);
+            let position = self.time_position(size);
             self.mono_regular_font
                 .draw_at(position, model.time(), 14, color::WHITE, &c, g);
 
-            let position = self.date_position(&size);
+            let position = self.date_position(size);
             self.mono_regular_font
                 .draw_at(position, model.date(), 14, color::WHITE, &c, g);
 
-            let position = self.inside_temperature_position(&size);
+            let position = self.inside_temperature_position(size);
             self.mono_regular_font
                 .draw_at(position, model.inside_temperature(), 14, color::WHITE, &c, g);
 
-            let position = self.outside_temperature_position(&size);
+            let position = self.outside_temperature_position(size);
             self.mono_regular_font
                 .draw_at(position, model.outside_temperature(), 14, color::WHITE, &c, g);
         }

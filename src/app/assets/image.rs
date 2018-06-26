@@ -57,10 +57,10 @@ impl Image {
         let p = position.into();
         self.draw_rect(
             [
-                p.x as f64,
-                p.y as f64,
-                self.texture.get_width() as f64,
-                self.texture.get_height() as f64,
+                f64::from(p.x),
+                f64::from(p.y),
+                f64::from(self.texture.get_width()),
+                f64::from(self.texture.get_height()),
             ],
             c,
             g,
