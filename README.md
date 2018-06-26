@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/zrzka/rust-thermometer.svg?branch=master)](https://travis-ci.org/zrzka/rust-thermometer)
+
 # Rust Thermometer
 
 Thermometer prototype written in the Rust language.
