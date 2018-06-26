@@ -1,5 +1,6 @@
 language: rust
 
+# Be aware, it caches also target/ folder, not just .cargo.
 cache:
   - cargo
 
