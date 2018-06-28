@@ -145,8 +145,8 @@ impl Config {
     }
 
     /// Temperature units.
-    pub fn temperature_units(&self) -> &Units {
-        &self.temperature_units
+    pub fn temperature_units(&self) -> Units {
+        self.temperature_units
     }
 
     /// Max frames per second.
