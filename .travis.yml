@@ -27,8 +27,8 @@ script:
   - cargo +nightly fmt --all -- --check
 
   # Build & test
-  - cargo build --verbose
-  - cargo test --verbose
+  - cargo build
+  - cargo test
 
   # Lints (allow to fail)
   - cargo +nightly clean -p thermometer
