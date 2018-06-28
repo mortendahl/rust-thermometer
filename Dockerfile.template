@@ -25,7 +25,7 @@ WORKDIR /usr/src/app
 # https://github.com/rust-lang-nursery/rustup.rs/issues/1055
 RUN cp `which uname` /bin/uname-orig && echo '#!/bin/bash\nif [[ $1 == "-m" ]]; then echo "armv7l"; else /bin/uname-orig $@; fi;' > `which uname`
 
-RUN curl -sSf https://static.rust-lang.org/rustup.sh | sh
+RUN curl -sSf https://static.rust-lang.org/rustup.sh | sh -s -- -y --revision=1.27.0
 
 COPY . /usr/src/app
 
