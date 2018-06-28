@@ -1,16 +1,17 @@
 pub mod ds18b20;
 
 use error::Error;
+use futures::Future;
 use std::str::FromStr;
 use w1::device::SlaveDevice;
 
 /// Trait that must be implemented by all temperature sensors.
 pub trait Thermometer: SlaveDevice {
-    fn read_temperature(&self) -> Result<Temperature, Error>;
+    fn temperature(&self) -> Box<dyn Future<Item = Temperature, Error = Error> + Send>;
 }
 
 /// Temperature unit.
-#[derive(PartialEq, Debug)]
+#[derive(PartialEq, Debug, Copy, Clone)]
 pub enum Units {
     Celsius,
     Fahrenheit,
@@ -69,7 +70,7 @@ impl Temperature {
     /// # Arguments
     ///
     /// * `units` - temperature units
-    pub fn to_string(&self, units: &Units) -> String {
+    pub fn to_string(&self, units: Units) -> String {
         match units {
             Units::Celsius => format!("{:.1} °C", self.celsius()),
             Units::Fahrenheit => format!("{:.1} °F", self.fahrenheit()),

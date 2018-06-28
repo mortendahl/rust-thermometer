@@ -1,37 +1,27 @@
 extern crate chrono;
 extern crate clap;
 extern crate find_folder;
-extern crate piston_window;
+extern crate futures;
 #[macro_use]
 extern crate lazy_static;
+extern crate piston_window;
+extern crate tokio;
+extern crate tokio_codec;
+extern crate tokio_fs;
+extern crate tokio_timer;
 
 mod app;
 mod config;
 mod error;
+mod processing;
 mod state;
-mod temperature;
 mod w1;
 
-use state::SharedState;
-use std::time::Duration;
-use w1::thermometer::ds18b20::DS18B20;
-
 fn main() {
-    let state = SharedState::new();
+    let shared_state = state::SharedState::new();
 
-    temperature::spawn_temperature_reader(
-        state.clone(),
-        temperature::Location::Inside,
-        Box::new(DS18B20::new(config::CONFIG.inside_thermometer_device())),
-        Duration::from_millis(config::CONFIG.temperature_interval()),
-    );
+    processing::spawn_background_thread(shared_state.clone());
 
-    temperature::spawn_temperature_reader(
-        state.clone(),
-        temperature::Location::Outside,
-        Box::new(DS18B20::new(config::CONFIG.outside_thermometer_device())),
-        Duration::from_millis(config::CONFIG.temperature_interval()),
-    );
-
-    app::run(state);
+    // TODO: Add some shutdown logic (SIGTERM), especially for Docker image on resinOS
+    app::run(shared_state);
 }

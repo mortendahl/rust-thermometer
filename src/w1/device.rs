@@ -1,11 +1,13 @@
 use error::Error;
-use std::fs;
+use futures::{Future, Stream};
+use tokio_codec::{FramedRead, LinesCodec};
+use tokio_fs::OpenOptions;
 
 /// W1 devices folder.
 pub const DEVICE_PATH_FOLDER: &str = "/sys/bus/w1/devices";
 
 /// W1 slave devices suffix.
-pub const DEVICE_PATH_SUFFIX: &str = "w1_slave";
+pub const SLAVE_DEVICE_PATH_SUFFIX: &str = "w1_slave";
 
 /// Trait that must be implemented by all W1 devices.
 pub trait Device: Send {
@@ -15,13 +17,17 @@ pub trait Device: Send {
 
 /// Trait that must be implemented by all W1 slave devices.
 pub trait SlaveDevice: Device {
-    /// Read bytes value.
-    fn read_bytes(&self) -> Result<Vec<u8>, Error> {
-        fs::read(self.device_path()).map_err(Error::from)
-    }
+    /// Stream of lines read from w1_slave.
+    fn lines(&self) -> Box<dyn Stream<Item = String, Error = Error> + Send> {
+        let path = self.device_path().to_string();
 
-    /// Read bytes value and try to convert it to `String`.
-    fn read_string(&self) -> Result<String, Error> {
-        Ok(String::from_utf8_lossy(&self.read_bytes()?).to_string())
+        Box::new(
+            OpenOptions::new()
+                .read(true)
+                .open(path)
+                .and_then(|f| Ok(FramedRead::new(f, LinesCodec::new())))
+                .flatten_stream()
+                .map_err(Error::from),
+        )
     }
 }
