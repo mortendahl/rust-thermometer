@@ -1,7 +1,17 @@
-FROM resin/%%RESIN_MACHINE_NAME%%-debian
+#
+# Arguments
+#
+ARG rust_revision=1.27.0
+
+#
+# Base image
+#
+#  - system
+#  - dependencies
+#
+FROM resin/%%RESIN_MACHINE_NAME%%-debian as base
 
 ENV INITSYSTEM on
-
 ENV DEBIAN_FRONTEND noninteractive
 
 RUN apt-get -q update && apt-get install -yq --no-install-recommends \
@@ -16,8 +26,6 @@ RUN apt-get -q update && apt-get install -yq --no-install-recommends \
     matchbox && \
 	apt-get clean && rm -rf /var/lib/apt/lists/*
 
-WORKDIR /usr/src/app
-
 # https://forums.resin.io/t/rustup-fails-for-armv8l/2661
 # -> https://forums.resin.io/t/resin-build-variable-inconsistency/1571/2
 # -> https://github.com/resin-io/docs/issues/739
@@ -25,7 +33,35 @@ WORKDIR /usr/src/app
 # https://github.com/rust-lang-nursery/rustup.rs/issues/1055
 RUN cp `which uname` /bin/uname-orig && echo '#!/bin/bash\nif [[ $1 == "-m" ]]; then echo "armv7l"; else /bin/uname-orig $@; fi;' > `which uname`
 
-RUN curl -sSf https://static.rust-lang.org/rustup.sh | sh -s -- -y --revision=1.27.0
+RUN curl -sSf https://static.rust-lang.org/rustup.sh | sh -s -- -y --revision=${rust_revision}
+
+#
+# Dependencies
+#
+#  - image based on `base`
+#  - Rust project dependencies
+#  - should not rebuild if Cargo.toml wasn't touched
+#
+FROM base as dependencies
+
+ENV USER root
+ENV PATH /root/.cargo/bin:$PATH
+
+WORKDIR /usr/src
+
+RUN cargo new app
+
+COPY Cargo.* /usr/src/app/
+
+WORKDIR /usr/src/app
+RUN cargo build
+
+#
+# Final image
+#
+FROM dependencies
+
+WORKDIR /usr/src/app
 
 COPY . /usr/src/app
 
