@@ -11,8 +11,8 @@ ARG rust_revision=1.27.0
 #
 FROM resin/%%RESIN_MACHINE_NAME%%-debian as base
 
-ENV INITSYSTEM on
-ENV DEBIAN_FRONTEND noninteractive
+ENV INITSYSTEM=on
+ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get -q update && apt-get install -yq --no-install-recommends \
 	build-essential curl file \
@@ -36,34 +36,16 @@ RUN cp `which uname` /bin/uname-orig && echo '#!/bin/bash\nif [[ $1 == "-m" ]]; 
 RUN curl -sSf https://static.rust-lang.org/rustup.sh | sh -s -- -y --revision=${rust_revision}
 
 #
-# Dependencies
+# Build
 #
-#  - image based on `base`
-#  - Rust project dependencies
-#  - should not rebuild if Cargo.toml wasn't touched
-#
-FROM base as dependencies
+FROM base
 
-ENV USER root
-ENV PATH /root/.cargo/bin:$PATH
-
-WORKDIR /usr/src
-
-RUN cargo new app
-
-COPY Cargo.* /usr/src/app/
-
-WORKDIR /usr/src/app
-RUN cargo build
-
-#
-# Final image
-#
-FROM dependencies
-
-WORKDIR /usr/src/app
+ENV USER=root
+ENV PATH=/root/.cargo/bin:$PATH
 
 COPY . /usr/src/app
+
+WORKDIR /usr/src/app
 
 RUN cargo build
 
