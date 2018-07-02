@@ -23,4 +23,6 @@ sed "s/%%RESIN_MACHINE_NAME%%/${RESIN_MACHINE_NAME}/g" "${DOCKERFILE_TEMPLATE}" 
 sudo resin local push -s . \
     --force-build \
     --ignore target \
+    --env "INSIDE_THERMOMETER=28-000008e948b7" \
+    --env "OUTSIDE_THERMOMETER=28-000009e9b786" \
     "$@"
